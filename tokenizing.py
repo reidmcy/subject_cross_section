@@ -5,6 +5,7 @@ import parsl
 import os
 import csv
 import json
+import logging
 
 import parsl_configs
 
