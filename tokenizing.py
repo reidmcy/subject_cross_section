@@ -63,7 +63,7 @@ def checkRunning(running):
     completesNameLists = [k for k, v in running.items() if v.done()]
     succCount = 0
     if len(completesNameLists) > 0:
-        with open(cleanedFile, a) as f:
+        with open(cleanedFile, 'a') as f:
             for name in completesNameLists:
                 try:
                     results = running.pop(name).result()
