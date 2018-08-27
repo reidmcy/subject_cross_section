@@ -13,7 +13,7 @@ subjectsDir = 'data'
 cleanedFile = 'processed.tsv'
 
 maxRunning = 256
-perBatch = 50
+perBatch = 500
 
 def subjectIter():
     for e in os.scandir(subjectsDir):
@@ -80,7 +80,7 @@ def main():
     print("Loading DFK")
     parsl.set_file_logger("parsl.log", level=logging.DEBUG)
 
-    dfk = parsl.DataFlowKernel(config=parsl_configs.localNode)
+    dfk = parsl.DataFlowKernel(config=parsl_configs.rccNodeExclusive)
 
     print("Loading App")
     full_app = gen_full_tokenizer(dfk)
