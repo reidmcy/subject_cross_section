@@ -22,6 +22,8 @@ cleanedFile = 'processed.tsv'
 maxRunning = 256
 perBatch = 500
 
+csv.field_size_limit(sys.maxsize)
+
 def display(inputS, end = '\n'):
     inputS = str(inputS)
     stdout.write(inputS)
@@ -36,13 +38,16 @@ def subjectIter():
     for e in os.scandir(subjectsDir):
         if e.name.endswith('.tsv'):
             with open(e.path) as f:
-                reader = csv.DictReader(f, delimiter = '\t')
+                reader = csv.DictReader(f, delimiter = '\t', quoting = csv.QUOTE_NONE)
                 for row in reader:
-                    yield {
-                        'wos_id' : row['wos_id'],
-                        'title' : row['title'],
-                        'abstract' : row['abstract'],
-                        }
+                    try:
+                        yield {
+                            'wos_id' : row['wos_id'],
+                            'title' : row['title'],
+                            'abstract' : row['abstract'],
+                            }
+                    except:
+                        pass
     return
 
 def gen_full_tokenizer(dfk):
