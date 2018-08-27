@@ -93,6 +93,7 @@ def main():
     running = {}
     done = False
     succCount = 0
+    doneIter = False
     try:
         while not done:
             #Only add maxRunning jobs to the queue at once
