@@ -17,7 +17,7 @@ stderr = sys.stderr
 sys.stdout = sys.stderr = open('stdout.txt', 'a')
 
 subjectsDir = 'data'
-cleanedFile = 'processed.tsv'
+cleanedFile = 'processed.json'
 
 maxRunning = 256
 perBatch = 500
@@ -79,7 +79,7 @@ def tokenizeEntry(entries):
                 'title' : tokenizer(e['title']),
                 'abstract' : sentinizer(e['abstract']),
                 })
-    return ret
+    return '\n'.join([json.dumps(r) for r in ret])
 
 def checkRunning(running):
     completesNameLists = [k for k, v in running.items() if v.done()]
@@ -92,10 +92,9 @@ def checkRunning(running):
                 except Exception as e:
                     display("{}\t{}".format(e, traceback.format_exc()))
                 else:
-                    for e in results:
-                        f.write(json.dumps(e))
-                        f.write('\n')
-                    succCount += len(results)
+                    f.write(results)
+                    f.write('\n')
+                    succCount += 50
     return succCount
 
 def main():
