@@ -7,6 +7,7 @@ import csv
 import json
 import logging
 import sys
+import traceback
 
 import parsl_configs
 
