@@ -83,7 +83,7 @@ def main():
     dfk = parsl.DataFlowKernel(config=parsl_configs.rccNodeExclusive)
 
     print("Loading App")
-    full_app = parsl_app.gen_full_tokenizer(dfk)
+    full_app = gen_full_tokenizer(dfk)
 
     print("Loading data iter")
     datIter = subjectIter()
