@@ -60,7 +60,7 @@ def tokenizeEntry(entries):
     return ret
 
 def checkRunning(running):
-    completesNameLists = [k for k in running.keys() if k.done()]
+    completesNameLists = [k for k, v in running.items() if v.done()]
     succCount = 0
     if len(completesNameLists) > 0:
         with open(cleanedFile, a) as f:
