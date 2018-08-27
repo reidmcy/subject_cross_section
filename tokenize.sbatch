@@ -17,4 +17,4 @@ source /project2/jevans/virt_sbatch/bin/activate
 echo "Starting"
 echo `which python`
 
-python tokenizer.py
+python tokenizing.py
