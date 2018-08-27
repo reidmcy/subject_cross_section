@@ -1,4 +1,4 @@
-import gensim
+print("importing")
 import nltk
 import parsl
 
@@ -33,6 +33,7 @@ def gen_full_tokenizer(dfk):
 
 
 def tokenizeEntry(entries):
+    import nltk
 
     def tokenizer(target):
         try:
@@ -76,7 +77,7 @@ def checkRunning(running):
 
 def main():
     print("Loading DFK")
-    parsl.set_file_logger(config.logFile, level=logging.DEBUG)
+    parsl.set_file_logger("parsl.log", level=logging.DEBUG)
 
     dfk = parsl.DataFlowKernel(config=parsl_configs.rccNodeExclusive)
 
@@ -94,7 +95,7 @@ def main():
     try:
         while not done:
             #Only add maxRunning jobs to the queue at once
-            while len(running) < config.maxRunning:
+            while len(running) < maxRunning:
                 batch = []
                 for i in range(perBatch):
                     try:
