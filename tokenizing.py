@@ -6,14 +6,30 @@ import os
 import csv
 import json
 import logging
+import sys
 
 import parsl_configs
+
+stdout = sys.stdout
+stderr = sys.stderr
+
+sys.stdout = sys.stderr = open('stdout.txt', 'a')
 
 subjectsDir = 'data'
 cleanedFile = 'processed.tsv'
 
 maxRunning = 256
 perBatch = 500
+
+def display(inputS, end = '\n'):
+    inputS = str(inputS)
+    stdout.write(inputS)
+    stdout.write(end)
+    stdout.flush()
+
+def resetStdout():
+    sys.stdout = stdout
+    sys.stderr = stderr
 
 def subjectIter():
     for e in os.scandir(subjectsDir):
@@ -68,7 +84,7 @@ def checkRunning(running):
                 try:
                     results = running.pop(name).result()
                 except Exception as e:
-                    print(str(e)) + '\n' + str(traceback.format_exc())
+                    display("{}\t{}".format(e, traceback.format_exc()))
                 else:
                     for e in results:
                         f.write(json.dumps(e))
@@ -77,18 +93,18 @@ def checkRunning(running):
     return succCount
 
 def main():
-    print("Loading DFK")
+    display("Loading DFK")
     parsl.set_file_logger("parsl.log", level=logging.DEBUG)
 
     dfk = parsl.DataFlowKernel(config=parsl_configs.rccNodeExclusive)
 
-    print("Loading App")
+    display("Loading App")
     full_app = gen_full_tokenizer(dfk)
 
-    print("Loading data iter")
+    display("Loading data iter")
     datIter = subjectIter()
 
-    print("Starting run")
+    display("Starting run")
 
     running = {}
     done = False
@@ -109,18 +125,21 @@ def main():
                 batchName = batch[0]['wos_id']
                 running[batchName] = full_app(batch)
             succCount += checkRunning(running)
-            print("Completed {}".format(succCount))
+            display("Completed {}".format(succCount))
             #End the loop if all jobs are done and no more can be added
             if doneIter and len(running) < 1:
                 done = True
 
     except KeyboardInterrupt:
-        print("Closing down")
+        display("Closing down")
         dfk.cleanup()
+        raise
+    except:
+        resetStdout()
         raise
 
     dfk.cleanup()
-    print("Done")
+    display("Done")
 
 if __name__ == '__main__':
     main()
