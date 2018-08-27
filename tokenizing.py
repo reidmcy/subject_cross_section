@@ -80,7 +80,7 @@ def main():
     print("Loading DFK")
     parsl.set_file_logger("parsl.log", level=logging.DEBUG)
 
-    dfk = parsl.DataFlowKernel(config=parsl_configs.rccNodeExclusive)
+    dfk = parsl.DataFlowKernel(config=parsl_configs.localNode)
 
     print("Loading App")
     full_app = gen_full_tokenizer(dfk)
