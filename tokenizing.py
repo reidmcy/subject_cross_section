@@ -57,6 +57,7 @@ def gen_full_tokenizer(dfk):
 
 def tokenizeEntry(entries):
     import nltk
+    import json
 
     def tokenizer(target):
         try:
